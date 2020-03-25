@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+#set -o xtrace
+
+__file="${BASH_SOURCE[0]}"
+__real_file="$(readlink -f "${BASH_SOURCE[0]}")"
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+__real_dir="$(cd "$(dirname "${__real_file}")" && pwd)"
+__caller_dir="$(pwd)"
+
+die()
+{
+    local _ret=${2:-1}
+    echo "$1" >&2
+    exit ${_ret}
+}
+
+main_script="${__real_dir}/php-no-xdebug"
+
+eval "${main_script}" "7.1" "$@"

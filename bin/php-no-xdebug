@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+#set -o xtrace
+
+__file="${BASH_SOURCE[0]}"
+__real_file="$(readlink -f "${BASH_SOURCE[0]}")"
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+__real_dir="$(cd "$(dirname "${__real_file}")" && pwd)"
+__caller_dir="$(pwd)"
+
+die()
+{
+    local _ret=${2:-1}
+    echo "$1" >&2
+    exit ${_ret}
+}
+
+print_help()
+{
+    printf 'PHP Runner with disabled Xdebug.\n'
+    printf '\n'
+    printf 'Usage: %s VERSION [REST]...\n' "$0"
+    printf '\n'
+    printf 'Supported versions: 7.1, 7.2, 7.3 and 7.4.'
+}
+
+if [ -z ${1:-} ]; then
+    print_help
+    exit 0
+fi
+
+version=${1}
+
+eval set -- "${@:2}"
+
+case ${version} in
+    7.1 | 7.2 | 7.3 | 7.4)
+        ;;
+    *)
+        die "Version ${version} is not supported."
+esac
+
+versioned_php="php${version}"
+
+temporary_path="$(mktemp -t php.XXXXXXXXXX).ini"
+
+# Using awk to ensure that files ending without newlines do not lead to configuration error
+/usr/bin/env ${versioned_php} -i \
+    | grep "\.ini" \
+    | grep -v COMPOSER_ORIGINAL_INIS \
+    | grep -v XDEBUG_HANDLER_SETTINGS \
+    | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' \
+    | grep -v xdebug \
+    | xargs awk 'FNR==1{print ""}1' > "${temporary_path}"
+
+echo "Temporary php.ini path: ${temporary_path}"
+
+/usr/bin/env ${versioned_php} -n -c "${temporary_path}" "$@"
+exit_code="$?"
+
+rm -f "${temporary_path}"
+
+exit ${exit_code}
+

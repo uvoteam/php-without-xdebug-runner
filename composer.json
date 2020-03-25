@@ -1,0 +1,36 @@
+{
+    "name": "uvoteam/php-without-xdebug-runner",
+    "type": "library",
+    "description": "Runner for PHP without Xdebug. Useful for collecting code coverage with PCOV even if Xdebug installed",
+    "keywords": [
+        "php",
+        "debug",
+        "xdebug",
+        "coverage",
+        "pcov"
+    ],
+    "homepage": "https://gitlab.zae.cc/php/php-without-xdebug-runner",
+    "license": "MIT",
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.3"
+    },
+    "config": {
+        "htaccess-protect": false,
+        "notify-on-install": false,
+        "platform": {
+            "php": "7.2"
+        },
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "bin": [
+        "bin/php-no-xdebug",
+        "bin/php7.1-no-xdebug",
+        "bin/php7.2-no-xdebug",
+        "bin/php7.3-no-xdebug",
+        "bin/php7.4-no-xdebug"
+    ]
+}
