@@ -9,7 +9,7 @@
         "coverage",
         "pcov"
     ],
-    "homepage": "https://gitlab.zae.cc/php/php-without-xdebug-runner",
+    "homepage": "https://github.com/uvoteam/php-without-xdebug-runner",
     "license": "MIT",
     "require": {
         "php": "^7.1"
