@@ -20,4 +20,4 @@ die()
 
 main_script="${__real_dir}/php-no-xdebug"
 
-eval "${main_script}" "7.4" "$@"
+"${main_script}" "7.4" "$@"

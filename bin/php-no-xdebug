@@ -34,7 +34,7 @@ fi
 
 version=${1}
 
-eval set -- "${@:2}"
+set -- "${@:2}"
 
 case ${version} in
     7.1 | 7.2 | 7.3 | 7.4)
